@@ -1,0 +1,35 @@
+.movieCard {
+  box-shadow: 1px 1px 11px #d1d1d1;
+  display: flex;
+  width: 451px;
+  height: 281px;
+  margin-bottom: 30px;
+}
+
+.movieImg {
+  width: 183px;
+  height: 281px;
+}
+
+.movieInfo {
+  padding: 15px;
+}
+
+.movieInfo h1 {
+  margin: 0;
+}
+
+.movieInfo span {
+  display: block;
+  color: #827e7e;
+  margin-bottom: 10px;
+}
+
+.button {
+  margin-right: 5px;
+}
+
+.description {
+  line-height: 22px;
+  margin-top: 10px;
+}
