@@ -4,6 +4,7 @@
   width: 451px;
   height: 281px;
   margin-bottom: 30px;
+  overflow: hidden;
 }
 
 .movieImg {
@@ -30,6 +31,10 @@
 }
 
 .description {
-  line-height: 22px;
   margin-top: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
