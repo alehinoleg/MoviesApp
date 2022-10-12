@@ -5,3 +5,20 @@
   justify-content: space-evenly;
   flex-wrap: wrap;
 }
+
+.spin {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.wraperMovie {
+  width: 100%;
+}
+
+.wraperMovie .pagination {
+  width: 17%;
+  margin: 10px auto;
+}
