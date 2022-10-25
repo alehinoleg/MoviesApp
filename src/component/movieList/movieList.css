@@ -22,3 +22,11 @@
   width: 17%;
   margin: 10px auto;
 }
+
+.ant-tabs-nav-wrap {
+  justify-content: center;
+}
+
+.ant-tabs-top > .ant-tabs-nav:before {
+  border: 1px solid white;
+}

@@ -1,26 +1,48 @@
-import { Button } from 'antd';
+import { Rate, Progress } from 'antd';
 import React, { Component } from 'react';
 
+import ContextMovies from '../../services/context-movies';
+import { postMovieId } from '../../services/swapi-services';
 
 import './movieCard.css'
 
 export default class MovieCard extends Component {
+  
 
   render() {
-    const {title, overview, release_date, poster_path } = this.props;
+    const {title, overview, release_date, poster_path, vote_average, genre_ids, id, rating } = this.props;
+    let color = '#E90000';
+    if (vote_average >= 3 && vote_average <= 5) {color='#E97E00'};
+    if (vote_average > 5 && vote_average <= 7) {color='#E9D100'};
+    if (vote_average > 7) {color='#66E900'};
+
     return(
-      <li>
-        <div className='movieCard' >
-          <img src={poster_path ? `https://image.tmdb.org/t/p/original/${poster_path}` : 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/xUuHj3CgmZQ9P2cMaqQs4J0d4Zc.jpg'} className='movieImg'></img>
-          <div className='movieInfo'>
-            <h1>{title}</h1>
-            <span>{release_date}</span>
-            <Button size={'small'} className='button'>Action</Button>
-            <Button size={'small'} className='button'>Drama</Button>
-            <p className='description'>{overview}</p>
-          </div>
-        </div>
-      </li>
+      <ContextMovies.Consumer>
+        { (value) => (
+          <li>
+            <div className='movieCard' >
+              <Progress type="circle" percent={100} className='progress' width='30px' format={() => vote_average} strokeColor={color}/>
+              <img src={poster_path ? `https://image.tmdb.org/t/p/original/${poster_path}` : 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/xUuHj3CgmZQ9P2cMaqQs4J0d4Zc.jpg'} className='movieImg'></img>
+              <div className='movieInfo'>
+                <h1>{title}</h1>
+                <span>{release_date}</span>
+                <div size={'small'} className='genres'>{
+                  genre_ids.map(el => {
+                    for (let res of value) {
+                      if (res.id === el) {
+                        return (<span key={res.id} className='generes-tile'>{res.name}</span>)
+                      }
+                    }
+                  })
+                }</div>
+                <p className='description'>{overview}</p>
+                <Rate onChange={(a) => {postMovieId(id, a)}} defaultValue = {rating} count={10} className='rateUser'/>
+              </div>
+            </div>
+          </li>
+        )
+        }
+      </ContextMovies.Consumer>
     );
   }
 }

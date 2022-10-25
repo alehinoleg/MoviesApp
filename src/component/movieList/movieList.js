@@ -1,19 +1,28 @@
-import { Spin, Pagination, Alert  } from 'antd';
+import { Spin, Pagination, Alert, Tabs  } from 'antd';
 import { Offline, Online } from 'react-detect-offline';
 import React, {Component} from 'react';
 
 import MovieCard from '../movieCard/movieCard';
 import MovieSearch from '../movieSearch';
+import { SwapiService } from '../../services/swapi-services';
 import './movieList.css';
 
 
 export default class MovieList extends Component {
+  swapiService = new SwapiService();
 
   render() {
-    const {movies, loading, error, onLabelChange, onPaginationChange } = this.props
+    const {movies, loading, error, onLabelChange, onPaginationChange, onRate, retaMovies } = this.props;
+    /*let localGet = JSON.parse(localStorage.getItem('rate'));*/
+    
+    const arr = movies.map(({title, overview, release_date, poster_path, id, vote_average, genre_ids }) => {
+      return <MovieCard title = {title} overview = {overview} release_date = {release_date} 
+        poster_path = {poster_path} key={id} genre_ids={genre_ids} vote_average = {vote_average} onRate = {onRate} id={id}/>
+    })
 
-    const arr = movies.map(({title, overview, release_date, poster_path, id }) => {
-      return <MovieCard title = {title} overview = {overview} release_date = {release_date} poster_path = {poster_path} key={id}/>
+    const arrRate = retaMovies.map(({title, overview, release_date, poster_path, id, vote_average, genre_ids, rating }) => {
+      return <MovieCard title = {title} overview = {overview} release_date = {release_date} 
+        poster_path = {poster_path} key={id} genre_ids={genre_ids} vote_average = {vote_average} onRate = {onRate} id={id} rating={rating}/>
     })
 
     const hasData = !(loading || error)
@@ -37,14 +46,29 @@ export default class MovieList extends Component {
     return(
       <div className='wraperMovie'>
         <Online>
-          <MovieSearch onLabelChange = {onLabelChange}/>
-          <ul className='movieList'>
-            {spinner}
-            {content}
-            {errorMessage}
-            {nullMovie}
-          </ul>
-          <Pagination size="small" total={50} onChange={onPaginationChange} className='pagination'/>
+          <Tabs defaultActiveKey="1">
+            onChange={(event) => {
+              if (event === 2) {
+                this.swapiService.getGuestSession()
+              }
+            }}
+            <Tabs.TabPane tab="Search" key="1">
+              <MovieSearch onLabelChange = {onLabelChange}/>
+              <ul className='movieList'>
+                {spinner}
+                {content}
+                {errorMessage}
+                {nullMovie}
+              </ul>
+              <Pagination size="small" total={50} onChange={onPaginationChange} className='pagination'/>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Rated" key="2">
+              <ul className='movieList'>
+                {arrRate}
+              </ul>
+            </Tabs.TabPane>
+          </Tabs>
+          
         </Online>
         <Offline>
           <div className='spin'>
