@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 
 import MovieCard from '../movieCard/movieCard';
 import MovieSearch from '../movieSearch';
-import { SwapiService } from '../../services/swapi-services';
+import SwapiService from '../../services/swapi-services';
 import './movieList.css';
 
 
@@ -13,7 +13,6 @@ export default class MovieList extends Component {
 
   render() {
     const {movies, loading, error, onLabelChange, onPaginationChange, onRate, retaMovies } = this.props;
-    /*let localGet = JSON.parse(localStorage.getItem('rate'));*/
     
     const arr = movies.map(({title, overview, release_date, poster_path, id, vote_average, genre_ids }) => {
       return <MovieCard title = {title} overview = {overview} release_date = {release_date} 
@@ -26,12 +25,12 @@ export default class MovieList extends Component {
     })
 
     const hasData = !(loading || error)
-    const spinner = loading ? 
+    const spinner = loading &&
       <div className='spin'>
         <Spin size="large"/>
-      </div> : null
-    const content = hasData ? arr : null;
-    const errorMessage = error ?
+      </div> 
+    const content = hasData && arr ;
+    const errorMessage = error &&
       <div className='spin'>
         <Alert
           message="Error"
@@ -39,16 +38,18 @@ export default class MovieList extends Component {
           type="error"
           showIcon
         />
-      </div> : null
-    const nullMovie = arr.length === 0 ? 
-      <div className='spin'>Таких фильмов нет</div> : null
+      </div>
+    const nullMovie = arr.length === 0 &&
+      <div className='spin'>Таких фильмов нет</div> 
 
+    const paginstion = arr.length !== 0 && <Pagination size="small" total={50} onChange={onPaginationChange} className='pagination'/>
     return(
       <div className='wraperMovie'>
         <Online>
           <Tabs defaultActiveKey="1">
             onChange={(event) => {
-              if (event === 2) {
+              let tabsKey = 2;
+              if (event === tabsKey) {
                 this.swapiService.getGuestSession()
               }
             }}
@@ -60,7 +61,7 @@ export default class MovieList extends Component {
                 {errorMessage}
                 {nullMovie}
               </ul>
-              <Pagination size="small" total={50} onChange={onPaginationChange} className='pagination'/>
+              {paginstion}
             </Tabs.TabPane>
             <Tabs.TabPane tab="Rated" key="2">
               <ul className='movieList'>

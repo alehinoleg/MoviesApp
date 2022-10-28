@@ -14,11 +14,14 @@
 }
 
 .movieInfo {
-  padding: 15px;
+  padding: 6px;
+  padding-right: 15px;
+  width: 250px;
 }
 
 .movieInfo h1 {
   margin: 0;
+  line-height: 30px;
 }
 
 .button {
@@ -52,8 +55,8 @@
 
 .progress {
   position: absolute;
-  left: 415px;
-  top: 5px;
+  left: 417px;
+  top: 4px;
   color: black;
 }
 
@@ -67,5 +70,5 @@
 
 .rateUser {
   position: absolute;
-  bottom: -4px;
+  bottom: 0px;
 }

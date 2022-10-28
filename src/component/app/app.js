@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
 
 
-import { SwapiService } from '../../services/swapi-services';
+import  SwapiService  from '../../services/swapi-services';
 import MovieList from '../movieList/movieList';
 import ContextMovies from '../../services/context-movies';
 
@@ -10,13 +10,8 @@ import 'antd/dist/antd.min.css';
 import './app.css'
 
 export default class App extends Component {
+  swapiService = new SwapiService();
 
-  constructor() {
-    super()
-    this.swapiService = new SwapiService();
-  }
-  
-  
   state = {
     AllMovies: [],
     generesMovies: [],
@@ -54,7 +49,7 @@ export default class App extends Component {
   }
 
   updateMovies = () => {
-    this.swapiService.getSearchMovies()
+    this.swapiService.getMovies('return', '1')
       .then(res => {
         this.setState(() => {
           return {
@@ -90,7 +85,7 @@ export default class App extends Component {
   onLabelChange = debounce(
     (event) => {
       if (event.target.value !== '') {
-        this.swapiService.getSearchMovie(event.target.value)
+        this.swapiService.getMovies(event.target.value, '1')
           .then(res => {
             this.setState(() => {
               return {
@@ -113,7 +108,7 @@ export default class App extends Component {
 
   onPaginationChange = (page) => {
     if (this.state.search !== '') {
-      this.swapiService.getPaginationMovie(this.state.search, page)
+      this.swapiService.getMovies(this.state.search, page)
         .then(res => {
           this.setState(() => {
             return {
@@ -125,7 +120,7 @@ export default class App extends Component {
         .catch(this.onError)
     }
     else {
-      this.swapiService.getPaginationMovie('return', page)
+      this.swapiService.getMovies('return', page)
         .then(res => {
           this.setState(() => {
             return {
@@ -137,18 +132,9 @@ export default class App extends Component {
         .catch(this.onError)
     }
   }
-
-  /*onRate = ( id, rating ) => {
-    this.setState(({ moviesRate }) => {
-      const rateLocal = {moviesRate: {...moviesRate, [id]: rating}}
-      console.log(rateLocal)
-      localStorage.setItem('rate', JSON.stringify(rateLocal))
-      return rateLocal;
-    });
-    console.log({[id]:rating});
-  };*/
   
   render() {
+    
     const { AllMovies, generesMovies, loading, error, moviesRate, retaMovies } = this.state;
     return (
       <div className='app'>
